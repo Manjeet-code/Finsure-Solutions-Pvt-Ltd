@@ -7,6 +7,7 @@ import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import api from '../lib/axios';
+import MockRepaymentGatewayModal from '../components/MockRepaymentGatewayModal';
 
 const RepaymentEmiPage = () => {
   const [data, setData] = useState(null);
@@ -257,67 +258,20 @@ const RepaymentEmiPage = () => {
         </div>
       )}
 
-      {/* Pay EMI Modal */}
+      {/* Simulated Payment Gateway Modal */}
       {payingEmi && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 border border-blue-100 relative">
-            <div className="flex justify-between items-start border-b border-slate-100 pb-3">
-              <div>
-                <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
-                  <CreditCard className="text-blue-600" size={22} /> Pay EMI Installment #{payingEmi.installmentNumber}
-                </h3>
-                <p className="text-xs text-slate-500 font-medium">Due Date: {new Date(payingEmi.dueDate).toLocaleDateString('en-IN')}</p>
-              </div>
-              <button onClick={() => setPayingEmi(null)} className="text-slate-400 hover:text-slate-600">
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-2xl space-y-1">
-              <div className="text-xs text-slate-500 uppercase font-bold tracking-wider">Installment Amount</div>
-              <div className="text-2xl font-black text-blue-700">₹{Number(payingEmi.amount).toLocaleString('en-IN')}</div>
-            </div>
-
-            <form onSubmit={handlePaySubmit} className="space-y-4 text-xs">
-              <div>
-                <label className="block font-bold text-slate-700 uppercase tracking-wider mb-2">Select Payment Method</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {['UPI', 'Net Banking', 'Debit Card'].map((pm) => (
-                    <button
-                      key={pm}
-                      type="button"
-                      onClick={() => setPaymentMethod(pm)}
-                      className={`p-3 rounded-xl border text-center font-bold text-xs transition-all ${
-                        paymentMethod === pm
-                          ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                          : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
-                      }`}
-                    >
-                      {pm}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-600 text-[11px]">
-                Payment will be instantly processed and credited against installment #{payingEmi.installmentNumber}.
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <Button type="button" variant="outline" onClick={() => setPayingEmi(null)}>
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={payLoading}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs"
-                >
-                  {payLoading ? 'Processing...' : `Confirm & Pay ₹${Number(payingEmi.amount).toLocaleString('en-IN')}`}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <MockRepaymentGatewayModal
+          emiItem={{
+            _id: payingEmi._id,
+            installmentNumber: payingEmi.installmentNumber,
+            totalInstallmentAmount: payingEmi.amount,
+          }}
+          onClose={() => setPayingEmi(null)}
+          onSuccess={() => {
+            setPayingEmi(null);
+            fetchMyEmiSchedule();
+          }}
+        />
       )}
 
     </div>

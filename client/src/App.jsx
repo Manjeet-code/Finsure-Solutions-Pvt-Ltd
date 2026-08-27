@@ -26,6 +26,7 @@ import RepaymentEmiPage from './pages/RepaymentEmiPage';
 import OverdueEmiReport from './pages/OverdueEmiReport';
 import PlatformAnalyticsPage from './pages/PlatformAnalyticsPage';
 import AuditLogPage from './pages/AuditLogPage';
+import ManagerMobilePage from './pages/ManagerMobilePage';
 import UpcomingFeaturePlaceholder from './components/common/UpcomingFeaturePlaceholder';
 
 function App() {
@@ -160,9 +161,19 @@ function App() {
             path="/overdue-report"
             element={
               <ProtectedRoute allowedRoles={['BRANCH_MANAGER', 'ADMIN']}>
-                <DashboardLayout title="Overdue EMI Report">
+                <DashboardLayout title="Overdue EMI Recovery & Risk Report">
                   <OverdueEmiReport />
                 </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Branch Manager Mobile Field Inspection View (Phase 14) */}
+          <Route
+            path="/manager/mobile"
+            element={
+              <ProtectedRoute allowedRoles={['BRANCH_MANAGER', 'ADMIN']}>
+                <ManagerMobilePage />
               </ProtectedRoute>
             }
           />

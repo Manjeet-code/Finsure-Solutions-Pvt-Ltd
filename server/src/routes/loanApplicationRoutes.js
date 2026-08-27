@@ -16,6 +16,7 @@ import {
   getApplicationAuditTrail,
   acceptSanctionLetter,
   disburseLoanApplication,
+  uploadFieldEvidence,
 } from '../controllers/loanApplicationController.js';
 
 const router = express.Router();
@@ -29,6 +30,7 @@ router.get('/:id', getLoanApplicationById);
 router.get('/:id/audit-trail', getApplicationAuditTrail);
 router.put('/:id', updateLoanApplication);
 router.post('/:id/upload', upload.single('document'), uploadApplicationDocument);
+router.post('/:id/field-evidence', authorize('Branch Manager', 'Admin'), upload.single('evidence'), uploadFieldEvidence);
 router.post('/:id/submit', submitLoanApplication);
 router.post('/:id/verify-doc', authorize('Branch Manager', 'Admin'), verifyApplicationDocument);
 router.post('/:id/request-reupload', authorize('Branch Manager', 'Admin'), requestDocumentReupload);

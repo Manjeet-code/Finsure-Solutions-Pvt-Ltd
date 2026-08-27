@@ -4,7 +4,10 @@ const uploadedDocumentSchema = new mongoose.Schema({
   documentType: {
     type: String,
     required: true,
-    enum: ['PAN', 'AADHAAR', 'SALARY_SLIP', 'BANK_STATEMENT', 'ITR', 'ADDRESS_PROOF', 'OTHER'],
+    enum: [
+      'PAN', 'AADHAAR', 'SALARY_SLIP', 'BANK_STATEMENT', 'ITR', 'ADDRESS_PROOF', 'OTHER',
+      'FIELD_INSPECTION_PHOTO', 'SITE_INSPECTION_PHOTO', 'BUSINESS_SHOP_PHOTO', 'INCOME_PROOF_EVIDENCE'
+    ],
   },
   fileUrl: {
     type: String,

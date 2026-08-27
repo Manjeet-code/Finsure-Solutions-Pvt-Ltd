@@ -731,3 +731,57 @@ export const disburseLoanApplication = async (req, res) => {
     return sendError(res, 'Failed to execute loan disbursal', 500);
   }
 };
+
+// @desc    Upload physical field verification evidence photo (Phase 14 Engine)
+// @route   POST /api/loans/:id/field-evidence
+// @access  Private (BRANCH_MANAGER, ADMIN)
+export const uploadFieldEvidence = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { evidenceType, remarks, locationText } = req.body;
+
+    const application = await LoanApplication.findById(id);
+    if (!application) {
+      return sendError(res, 'Loan application not found', 404);
+    }
+
+    if (!req.file) {
+      return sendError(res, 'No photo evidence file uploaded', 400);
+    }
+
+    const fileUrl = req.file.path.startsWith('http')
+      ? req.file.path
+      : `/uploads/${req.file.filename || req.file.path.split(/[\\/]/).pop()}`;
+
+    const evidenceDoc = {
+      documentType: evidenceType || 'FIELD_INSPECTION_PHOTO',
+      fileName: req.file.originalname,
+      fileUrl,
+      fileType: req.file.mimetype,
+      status: 'VERIFIED',
+      uploadedAt: new Date(),
+    };
+
+    application.uploadedDocuments.push(evidenceDoc);
+    await application.save();
+
+    await logAuditEvent({
+      applicationId: application._id,
+      action: 'FIELD_EVIDENCE_UPLOADED',
+      req,
+      previousStatus: application.status,
+      newStatus: application.status,
+      remarks: remarks || `Field evidence photo (${evidenceType || 'Site Inspection'}) uploaded by manager`,
+      details: {
+        evidenceType: evidenceType || 'FIELD_INSPECTION_PHOTO',
+        locationText: locationText || 'On-site verification',
+        fileUrl,
+      },
+    });
+
+    return sendSuccess(res, application, 'Field verification evidence uploaded successfully');
+  } catch (error) {
+    console.error('Upload field evidence error:', error);
+    return sendError(res, 'Failed to upload field evidence photo', 500);
+  }
+};

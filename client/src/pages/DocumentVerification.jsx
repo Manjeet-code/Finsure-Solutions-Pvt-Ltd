@@ -9,6 +9,7 @@ import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import Input from '../components/ui/Input';
 import api from '../lib/axios';
+import MockBankDisbursalModal from '../components/MockBankDisbursalModal';
 
 const DocumentVerification = () => {
   const [searchParams] = useSearchParams();
@@ -542,63 +543,17 @@ const DocumentVerification = () => {
 
       </div>
 
-      {/* Disbursal Execution Modal */}
+      {/* Disbursal Execution Mock Bank Gateway Modal */}
       {showDisburseModal && selectedApp && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 border border-emerald-100 shadow-2xl relative">
-            <div className="flex justify-between items-start border-b border-slate-100 pb-3">
-              <div>
-                <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
-                  <Banknote className="text-emerald-600" size={22} /> Execute Loan Disbursal
-                </h3>
-                <p className="text-xs text-slate-500 font-medium">App ID: {selectedApp.applicationId} | Sanction Ref: {selectedApp.sanctionRefNumber}</p>
-              </div>
-              <button onClick={() => setShowDisburseModal(false)} className="text-slate-400 hover:text-slate-600">
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-1 text-xs">
-              <div className="font-bold text-emerald-950 text-sm">{selectedApp.applicantDetails?.fullName}</div>
-              <div className="text-emerald-800">
-                Disbursal Amount: <strong className="text-emerald-950 font-mono text-base">₹{Number(selectedApp.approvedAmount || selectedApp.amount).toLocaleString('en-IN')}</strong>
-              </div>
-              {selectedApp.disbursementAccountDetails && (
-                <div className="text-[11px] text-emerald-700 font-mono mt-1 pt-1 border-t border-emerald-200">
-                  Target A/C: {selectedApp.disbursementAccountDetails.bankName} - {selectedApp.disbursementAccountDetails.accountNumber} ({selectedApp.disbursementAccountDetails.ifscCode})
-                </div>
-              )}
-            </div>
-
-            <form onSubmit={handleExecuteDisbursal} className="space-y-4 text-xs">
-              <div>
-                <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Disbursement Transaction Reference / NEFT ID *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={disbursementRefNumber}
-                  onChange={(e) => setDisbursementRefNumber(e.target.value.toUpperCase())}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-xs font-bold uppercase focus:ring-2 focus:ring-emerald-500"
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <Button type="button" variant="outline" onClick={() => setShowDisburseModal(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={disburseLoading}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs"
-                >
-                  {disburseLoading ? 'Executing Transfer...' : 'Confirm Loan Disbursal'}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <MockBankDisbursalModal
+          application={selectedApp}
+          onClose={() => setShowDisburseModal(false)}
+          onSuccess={() => {
+            setShowDisburseModal(false);
+            setMessage('Mock bank disbursal executed successfully & database synchronized!');
+            fetchReviewQueue();
+          }}
+        />
       )}
 
     </div>

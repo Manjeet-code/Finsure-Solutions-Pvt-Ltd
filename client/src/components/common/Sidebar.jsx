@@ -10,7 +10,8 @@ import {
   Bell, 
   ShieldAlert, 
   UserCheck, 
-  PieChart 
+  PieChart,
+  Smartphone
 } from 'lucide-react';
 
 const Sidebar = ({ role = 'USER' }) => {
@@ -29,6 +30,7 @@ const Sidebar = ({ role = 'USER' }) => {
     { label: 'Review Queue', path: '/applications', icon: FolderCheck },
     { label: 'Document Verification', path: '/documents', icon: FileText },
     { label: 'Overdue EMI Report', path: '/overdue-report', icon: ShieldAlert },
+    { label: 'Mobile Field App', path: '/manager/mobile', icon: Smartphone },
   ];
 
   const adminNav = [
@@ -40,6 +42,7 @@ const Sidebar = ({ role = 'USER' }) => {
     { label: 'Overdue EMI Report', path: '/overdue-report', icon: ShieldAlert },
     { label: 'Platform Analytics', path: '/analytics', icon: PieChart },
     { label: 'Audit Trail', path: '/audit', icon: ShieldAlert },
+    { label: 'Mobile Field App', path: '/manager/mobile', icon: Smartphone },
   ];
 
   const getNavItems = () => {
