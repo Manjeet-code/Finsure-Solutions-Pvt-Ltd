@@ -37,10 +37,3 @@ services:
           property: url
           suffix: /api
 
-  # 3. Python FastAPI AI Service (Optional)
-  - type: web
-    name: finsure-ai-service
-    env: python
-    rootDir: ai-service
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
