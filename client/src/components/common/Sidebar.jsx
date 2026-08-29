@@ -11,10 +11,11 @@ import {
   ShieldAlert, 
   UserCheck, 
   PieChart,
-  Smartphone
+  Smartphone,
+  X
 } from 'lucide-react';
 
-const Sidebar = ({ role = 'USER' }) => {
+const Sidebar = ({ role = 'USER', isOpen = false, onClose = () => {} }) => {
   const location = useLocation();
 
   const userNav = [
@@ -59,17 +60,36 @@ const Sidebar = ({ role = 'USER' }) => {
   const navItems = getNavItems();
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col h-screen fixed left-0 top-0 z-40 border-r border-slate-800">
-      {/* Official FinSure Brand Header */}
-      <Link to="/" className="h-16 px-5 flex items-center gap-3 border-b border-slate-800 bg-slate-950 hover:bg-slate-900 transition-colors">
-        <div className="flex items-center justify-center p-1 bg-slate-900 rounded-xl border border-slate-800 shadow-sm shrink-0">
-          <img src="/logo.png" alt="FinSure Logo" className="h-7 w-7 object-contain rounded-lg" />
+    <>
+      {/* Mobile Backdrop Overlay */}
+      {isOpen && (
+        <div 
+          onClick={onClose}
+          className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 lg:hidden transition-opacity"
+        />
+      )}
+
+      <aside className={`w-64 bg-slate-900 text-slate-300 flex flex-col h-screen fixed left-0 top-0 z-50 border-r border-slate-800 transition-transform duration-300 ease-in-out ${
+        isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      }`}>
+        {/* Official FinSure Brand Header */}
+        <div className="h-16 px-5 flex items-center justify-between border-b border-slate-800 bg-slate-950">
+          <Link to="/" onClick={onClose} className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+            <div className="flex items-center justify-center p-1 bg-slate-900 rounded-xl border border-slate-800 shadow-sm shrink-0">
+              <img src="/logo.png" alt="FinSure Logo" className="h-7 w-7 object-contain rounded-lg" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-black text-base text-white tracking-tight leading-tight">FinSure</span>
+              <span className="text-[10px] text-blue-400 font-bold uppercase tracking-wider -mt-0.5">Solutions Pvt Ltd</span>
+            </div>
+          </Link>
+          <button 
+            onClick={onClose}
+            className="lg:hidden p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
+          >
+            <X size={20} />
+          </button>
         </div>
-        <div className="flex flex-col">
-          <span className="font-black text-base text-white tracking-tight leading-tight">FinSure</span>
-          <span className="text-[10px] text-blue-400 font-bold uppercase tracking-wider -mt-0.5">Solutions Pvt Ltd</span>
-        </div>
-      </Link>
 
       {/* Role Navigation */}
       <div className="px-4 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -84,6 +104,7 @@ const Sidebar = ({ role = 'USER' }) => {
             <Link
               key={item.path}
               to={item.path}
+              onClick={onClose}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 isActive
                   ? 'bg-blue-600 text-white font-semibold shadow-xs'
@@ -102,6 +123,7 @@ const Sidebar = ({ role = 'USER' }) => {
         FinSure Platform v1.0.0
       </div>
     </aside>
+    </>
   );
 };
 
