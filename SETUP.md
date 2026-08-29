@@ -29,9 +29,9 @@ cd Finsure-Solutions-Pvt-Ltd
 
 ### Step 2: Backend Setup
 
-1. Navigate to the `backend` directory:
+1. Navigate to the `server` directory:
    ```bash
-   cd backend
+   cd server
    ```
 
 2. Install backend dependencies:
@@ -39,7 +39,7 @@ cd Finsure-Solutions-Pvt-Ltd
    npm install
    ```
 
-3. Create the environment file `.env` in the `backend` directory:
+3. Create the environment file `.env` in the `server` directory:
    ```env
    PORT=5000
    JWT_SECRET=finsure-dev-jwt-secret-key-dev
@@ -68,11 +68,11 @@ cd Finsure-Solutions-Pvt-Ltd
 
 ### Step 3: Frontend Setup
 
-Open a **new terminal window** in the project root directory (`finsure-solutions`):
+Open a **new terminal window** in the project root directory (`Finsure-Solutions-Pvt-Ltd`):
 
-1. Navigate to the `frontend` directory:
+1. Navigate to the `client` directory:
    ```bash
-   cd frontend
+   cd client
    ```
 
 2. Install frontend dependencies:
@@ -110,22 +110,27 @@ You can log in with any of the following pre-configured role accounts. Password 
 ## 🏗️ Project Architecture & Tech Stack
 
 ```text
-finsure-solutions/
-├── frontend/                # React (Vite) + Tailwind CSS
+Finsure-Solutions-Pvt-Ltd/
+├── client/                  # React 19 + Vite + Tailwind CSS Frontend
 │   ├── src/
 │   │   ├── components/      # Reusable Layout, Forms & Status-Stepper components
-│   │   ├── pages/            # Auth, Dashboard, Applications, Branches, Loan Products
-│   │   ├── services/         # Axios API client
-│   │   └── contexts/         # Auth & User state context
-│   └── vite.config.js        # Proxy configured to http://127.0.0.1:5000
+│   │   ├── pages/           # Auth, Dashboard, Applications, Branches, Loan Products
+│   │   ├── services/        # Axios API client
+│   │   └── context/         # Auth & User state context
+│   └── vite.config.js       # Proxy configured to http://127.0.0.1:5000
 │
-├── backend/                  # Node.js + Express + MongoDB (Mongoose)
+├── server/                  # Node.js + Express + MongoDB (Mongoose)
 │   ├── src/
-│   │   ├── config/           # DB connection & Constants
-│   │   ├── middleware/       # JWT Auth & RBAC
-│   │   ├── modules/          # Auth, Users, Branches, LoanProducts, Applications, EMI routes
-│   │   └── seeds/            # Auto-seeding scripts for synthetic demo data
-│   └── app.js                # Express app entry point
+│   │   ├── config/          # DB connection & Constants
+│   │   ├── middleware/      # JWT Auth & RBAC
+│   │   ├── routes/          # Auth, Users, Branches, LoanProducts, Applications
+│   │   └── models/          # Mongoose Schemas & Data models
+│   ├── index.js             # Express app entry point
+│   └── seed.js              # Auto-seeding script for synthetic demo data
+│
+└── ai-service/              # Python FastAPI AI Eligibility Microservice
+    ├── main.py              # Credit scoring & eligibility prediction API
+    └── requirements.txt
 ```
 
 ---
@@ -150,13 +155,13 @@ You can set up MongoDB using **any of the 3 options below**. Option 1 (MongoDB A
 
 #### Step 3: Connect Backend to Atlas
 1. On the cluster page, click **Connect** → **Drivers** → copy the connection string (e.g. `mongodb+srv://alex:xyz123@finsure.abcde.mongodb.net/?retryWrites=true&w=majority`).
-2. Open `backend/.env` on your computer and set `MONGODB_URI`, including the database name:
+2. Open `server/.env` on your computer and set `MONGODB_URI`, including the database name:
    ```env
    MONGODB_URI=mongodb+srv://alex:xyz123@finsure.abcde.mongodb.net/finsure?retryWrites=true&w=majority
    ```
 3. Start the backend:
    ```bash
-   cd backend
+   cd server
    npm run dev
    ```
    *(The backend will connect to Atlas, create all collections, and seed synthetic demo data automatically!)*
@@ -172,11 +177,11 @@ If you prefer running a database locally using Docker Desktop:
    ```bash
    docker compose up -d
    ```
-3. In `backend/.env`, set:
+3. In `server/.env`, set:
    ```env
    MONGODB_URI=mongodb://finsure_user:finsure_dev_password@localhost:27017/finsure?authSource=admin
    ```
-4. Start backend: `cd backend && npm run dev`
+4. Start backend: `cd server && npm run dev`
 
 ---
 
@@ -209,10 +214,10 @@ If you want local MongoDB without Docker:
 ## 🛠️ Troubleshooting
 
 ### Issue: Proxy `ECONNREFUSED` error on login
-- **Solution**: Make sure the backend server (`cd backend && npm run dev`) is running on port `5000` before opening the frontend.
+- **Solution**: Make sure the backend server (`cd server && npm run dev`) is running on port `5000` before opening the frontend.
 
 ### Issue: Backend fails to start with `MongoServerSelectionError`
-- **Solution**: Confirm `MONGODB_URI` in `backend/.env` is correct, your MongoDB service (local/Docker) is running, and — if using Atlas — that your current IP is allowed under **Network Access**.
+- **Solution**: Confirm `MONGODB_URI` in `server/.env` is correct, your MongoDB service (local/Docker) is running, and — if using Atlas — that your current IP is allowed under **Network Access**.
 
 ### Issue: Port 5000 or 5173 is already in use
 - **Windows Solution**:
