@@ -372,7 +372,7 @@ const DocumentVerification = () => {
 
                       <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                         <a
-                          href={`http://localhost:5000${doc.fileUrl}`}
+                          href={doc.fileUrl ? (doc.fileUrl.startsWith('http') ? doc.fileUrl : `${(import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/api\/?$/, '')}${doc.fileUrl.startsWith('/') ? '' : '/'}${doc.fileUrl}`) : '#'}
                           target="_blank"
                           rel="noreferrer"
                           className="px-3 py-1.5 bg-white text-blue-700 hover:bg-blue-50 border border-slate-300 font-bold text-xs rounded-lg shadow-2xs"

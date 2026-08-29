@@ -532,9 +532,8 @@ const CitizenDashboard = () => {
                 <div className="space-y-3 max-h-80 overflow-y-auto">
                   {selectedLoanDocs.map((doc, idx) => {
                     const docType = (doc.documentType || doc.type || 'KYC Document').replace('_', ' ');
-                    const isVerified = doc.status === 'VERIFIED' || doc.isVerified;
                     const rawUrl = doc.fileUrl || doc.url || '';
-                    const fileUrl = rawUrl.startsWith('http') ? rawUrl : `http://localhost:5000${rawUrl}`;
+                    const fileUrl = !rawUrl ? '#' : rawUrl.startsWith('http') ? rawUrl : `${(import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/api\/?$/, '')}${rawUrl.startsWith('/') ? '' : '/'}${rawUrl}`;
 
                     return (
                       <div key={doc._id || idx} className="flex justify-between items-center p-3 bg-slate-50 border border-slate-200 rounded-xl">

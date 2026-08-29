@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { MessageSquare, X, Send, Loader2, Bot } from 'lucide-react';
-import axios from 'axios';
+import api from '../lib/axios';
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,10 +37,7 @@ const Chatbot = () => {
         content: m.content
       }));
 
-      // Assuming API is running on localhost:5000 if not proxying, 
-      // but usually the app has a base URL config.
-      // Adjust if you have a specific axios instance setup.
-      const res = await axios.post('http://localhost:5000/api/chat', { messages: apiMessages });
+      const res = await api.post('/chat', { messages: apiMessages });
       
       setMessages(prev => [...prev, { role: 'assistant', content: res.data.reply }]);
     } catch (error) {
