@@ -32,22 +32,32 @@ app.use(sanitizeInputs);
 app.use('/api', apiRateLimiter);
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
+// Health check endpoints
+const handleHealth = (req, res) => {
   return sendSuccess(res, { status: 'UP', timestamp: new Date() }, 'FinSure API server is running smoothly');
-});
+};
+app.get('/api/health', handleHealth);
+app.get('/health', handleHealth);
 
-app.use('/api/auth', authRoutes);
-app.use('/api/branches', branchRoutes);
-app.use('/api/loan-products', loanProductRoutes);
-app.use('/api/loans', loanApplicationRoutes);
-app.use('/api/emi', emiRoutes);
-app.use('/api/payments', paymentRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/analytics', analyticsRoutes);
-app.use('/api/audit-logs', auditLogRoutes);
-app.use('/api/chat', chatRoutes);
-app.use('/api/contact', contactRoutes);
+// Route mounts (supporting both /api/path and /path)
+const routes = [
+  ['/auth', authRoutes],
+  ['/branches', branchRoutes],
+  ['/loan-products', loanProductRoutes],
+  ['/loans', loanApplicationRoutes],
+  ['/emi', emiRoutes],
+  ['/payments', paymentRoutes],
+  ['/notifications', notificationRoutes],
+  ['/analytics', analyticsRoutes],
+  ['/audit-logs', auditLogRoutes],
+  ['/chat', chatRoutes],
+  ['/contact', contactRoutes],
+];
+
+routes.forEach(([pathStr, router]) => {
+  app.use(`/api${pathStr}`, router);
+  app.use(pathStr, router);
+});
 
 app.get('/', (req, res) => {
   res.send('FinSure API Service Version 1.0');
