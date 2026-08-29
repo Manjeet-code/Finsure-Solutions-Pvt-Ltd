@@ -21,8 +21,8 @@ Before starting, ensure you have the following software installed on your comput
 Open your terminal or command prompt and run:
 
 ```bash
-git clone https://github.com/your-org/finsure-solutions.git
-cd finsure-solutions
+git clone https://github.com/Manjeet-code/Finsure-Solutions-Pvt-Ltd.git
+cd Finsure-Solutions-Pvt-Ltd
 ```
 
 ---
