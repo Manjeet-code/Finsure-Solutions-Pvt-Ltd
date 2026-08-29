@@ -108,7 +108,7 @@ CRITICAL RULES:
 
         const chatCompletion = await groq.chat.completions.create({
           messages: apiMessages,
-          model: 'llama-3.1-8b-instant',
+          model: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
           temperature: 0.7,
           max_tokens: 500,
         });
