@@ -371,6 +371,8 @@ const ApplicationDetails = () => {
                       </div>
                       {doc.remarks && <p className="text-[10px] text-red-600 italic">{doc.remarks}</p>}
                     </div>
+                  </div>
+
                   <div className="flex items-center gap-2">
                     <a
                       href={doc.fileUrl ? (doc.fileUrl.startsWith('http') ? doc.fileUrl : `${(import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/api\/?$/, '')}${doc.fileUrl.startsWith('/') ? '' : '/'}${doc.fileUrl}`) : '#'}
